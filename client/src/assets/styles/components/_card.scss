@@ -1,0 +1,17 @@
+.card {
+  width: 100%;
+  display: block;
+  box-shadow: 0 4px 25px 0 rgba(#000, 0.1);
+  position: relative;
+  border-radius: 0.5rem;
+  background: #fff;
+  transition: all 0.3s ease-in-out;
+
+  &--bg-dark {
+    background: rgba(#fff, 0.02);
+  }
+
+  &__body {
+    padding: 1.5rem;
+  }
+}

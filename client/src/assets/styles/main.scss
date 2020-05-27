@@ -1,5 +1,19 @@
 @charset "UTF-8";
 
-@import './abstracts/variables';
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,300;0,700;1,400&display=swap');
 
-@import './base/base';
+@import
+  './abstracts/variables',
+  './abstracts/mixins';
+
+@import
+  './base/reset',
+  './base/base';
+
+@import
+  './layout/main',
+  './layout/forms';
+
+@import './components/card';
+
+@import './pages/login';

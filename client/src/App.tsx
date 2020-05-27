@@ -1,12 +1,16 @@
 import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './assets/styles/main.scss';
+import PagesRoute from './components/AppRoute/PagesRoute';
 
-function App() {
+const App: React.FC = (): JSX.Element => {
   return (
-    <div className="App">
-      <h1>React App</h1>
-    </div>
+    <Router>
+      <div className="inner-root">
+        <Route component={PagesRoute} />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
