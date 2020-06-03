@@ -17,7 +17,9 @@ export class UserController {
     const { id } = req.params;
 
     try {
-      const user = await getRepository(User).findOne(id);
+      const user = await getRepository(User).findOne(id, {
+        select: ['firstName', 'lastName', 'email']
+      });
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }

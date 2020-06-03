@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../app/rootReducer';
 
 interface IProps {
   component: React.ComponentType<any>;
@@ -11,7 +13,7 @@ const LoggedOutRoute = ({
   component: Component,
   ...rest
 }: IProps): JSX.Element => {
-  const isAuthenticated: boolean | null = false;
+  const { isAuthenticated } = useSelector( (state: RootState) => state.auth);
   return (
     <Route
       {...rest}

@@ -1,4 +1,8 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { loginRequest } from './loginSlice';
+import { RootState } from './../../app/rootReducer';
 
 interface IFormFields {
   email: string;
@@ -6,6 +10,8 @@ interface IFormFields {
 }
 
 const LoginPage: React.FC = (): JSX.Element => {
+  const history = useHistory();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<IFormFields>({
     email: '',
     password: '',
@@ -13,6 +19,8 @@ const LoginPage: React.FC = (): JSX.Element => {
   const [isSubmitDisabled, setIsSubmitDisabled] = useState<boolean>(true);
 
   const { email, password } = formData;
+
+  const { isAuthenticated } = useSelector( (state: RootState) => state.auth);
 
   useEffect(() => {
     if (email.trim() && password.trim()) {
@@ -22,6 +30,12 @@ const LoginPage: React.FC = (): JSX.Element => {
     }
   }, [email, password]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push('/dashboard');
+    }
+  }, [isAuthenticated, history]);
+
   const onChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -29,7 +43,7 @@ const LoginPage: React.FC = (): JSX.Element => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<any> => {
     e.preventDefault();
-    console.log(email, password);
+    dispatch(loginRequest({email, password}));
     setFormData({
       email: '',
       password: '',
@@ -50,7 +64,7 @@ const LoginPage: React.FC = (): JSX.Element => {
             <div className='form-group'>
               <input
                 type='email'
-                placeholder='Email'
+                placeholder='Enter an email'
                 name='email'
                 value={email}
                 onChange={e => onChange(e)}
@@ -60,7 +74,7 @@ const LoginPage: React.FC = (): JSX.Element => {
             <div className='form-group'>
               <input
                 type='password'
-                placeholder='Password'
+                placeholder='Enter a Password'
                 name='password'
                 value={password}
                 onChange={e => onChange(e)}

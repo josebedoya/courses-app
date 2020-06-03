@@ -1,7 +1,6 @@
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcryptjs';
 import { User } from '../entity/User';
 import config from '../config/config';
 
@@ -24,9 +23,12 @@ class AuthController {
       user.checkPassword(password).then(result => {
         if (result) {
           const payload = {
-            userId: user.id
+            userId: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
           }
-          const token = jwt.sign(payload, config.jwtSecret);
+          const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '10d' });
           res.json({ token });
         } else {
           return res.status(400).json({ message: 'Invalid credentials' });

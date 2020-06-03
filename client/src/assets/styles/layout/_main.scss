@@ -4,8 +4,38 @@ html, body {
 }
 
 #root,
-.inner-root,
 .unauthorized-layout {
 	width: 100%;
 	height: 100%;
+}
+
+.layout {
+  display: flex;
+	flex: auto;
+	overflow: auto;
+	overflow-x: hidden;
+}
+
+.sidebar {
+	flex: 0 0 260px;
+	width: 260px;
+	z-index: 1000;
+	transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+	position: relative;
+  min-width: 0;
+
+  &--collapsed {
+		flex: 0 0 64px;
+		width: 64px;
+	}
+}
+
+.main-content {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex: auto;
+	height: 100vh;
+  flex-shrink: 0;
+	overflow-x: hidden;
 }

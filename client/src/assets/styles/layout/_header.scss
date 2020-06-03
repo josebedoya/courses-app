@@ -1,0 +1,16 @@
+.header {
+  position: fixed;
+  top: 0;
+  width: calc(100% - 288px);
+  height: 60px;
+  padding: 0;
+  margin: 14px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  background-color: $header-bg-color;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  color: #000;
+  box-shadow: 0 4px 10px 0 rgba(#000, 0.1);
+}

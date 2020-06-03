@@ -12,8 +12,15 @@
 
 @import
   './layout/main',
+  './layout/sidebar',
+  './layout/sidebarLeft',
+  './layout/mainContent',
+  './layout/header',
+  './layout/footer',
   './layout/forms';
 
-@import './components/card';
+@import
+  './components/menu',
+  './components/card';
 
 @import './pages/login';
