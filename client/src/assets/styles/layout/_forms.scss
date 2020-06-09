@@ -11,3 +11,63 @@ input {
   text-rendering: auto;
   box-sizing: border-box;
 }
+input[type="submit"] {
+  cursor: pointer;
+}
+
+.form-fields-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  &.flex-end {
+    justify-content: flex-end;
+  }
+  &.gm-input-search {
+    width: calc(100% - 10px);
+    margin: 5px 0 0 5px;
+    .ant-input {
+      background-color: rgba(#FFF, 0.94);
+    }
+  }
+  &.show-data {
+    justify-content: flex-start;
+  }
+  .show-data-info {
+    font-size: 16px;
+    padding-right: 22px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    .label {
+      font-weight: 700;
+      font-size: 18px;
+      margin-right: 10px
+    }
+  }
+}
+
+.form-field-wrapper {
+  @include space-out(1, 6);
+  margin-bottom: 10px;
+  &.flex {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  &.inline {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  &.hidden {
+    margin: 0;
+    display: none;
+  }
+  .error-text {
+    color: $alert-color;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+  }
+}

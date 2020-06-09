@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+@import '~antd/dist/antd.compact.css';
+
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100;0,300;0,700;1,400&display=swap');
 
 @import
@@ -9,6 +11,8 @@
 @import
   './base/reset',
   './base/base';
+
+@import './components/antdOverride';
 
 @import
   './layout/main',

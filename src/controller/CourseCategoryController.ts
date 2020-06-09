@@ -49,6 +49,16 @@ export class CourseCategoryController {
     }
 
     //
-    res.json({ message: 'Category created' });
+    res.json(category);
   };
+
+  static delete = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.body;
+    try {
+      const result = await getRepository(CourseCategory).delete(id);
+      return res.json(result);
+    } catch (err) {
+      return res.status(500).send('Server errror');
+    }
+  }
 }

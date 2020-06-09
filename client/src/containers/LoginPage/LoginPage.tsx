@@ -1,8 +1,10 @@
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { showNotification } from './../../utils/notifications';
 import { loginRequest } from './loginSlice';
 import { RootState } from './../../app/rootReducer';
+import InputField from '../../components/Common/InputField';
 
 interface IFormFields {
   email: string;
@@ -20,7 +22,7 @@ const LoginPage: React.FC = (): JSX.Element => {
 
   const { email, password } = formData;
 
-  const { isAuthenticated } = useSelector( (state: RootState) => state.auth);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     if (email.trim() && password.trim()) {
@@ -43,42 +45,38 @@ const LoginPage: React.FC = (): JSX.Element => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<any> => {
     e.preventDefault();
-    dispatch(loginRequest({email, password}));
+    const response: any = await dispatch(loginRequest({ email, password }));
+    if (loginRequest.fulfilled.match(response)) {
+      showNotification('success', `Welcome ${response.payload.firstName}`);
+    } else {
+      showNotification('error', 'Login error', response.payload.message);
+    }
     setFormData({
       email: '',
       password: '',
     });
   };
 
-  const handleKeyPress = (e: any) => {
-    if (e.keyCode === 13 || e.which === 13) {
-      isSubmitDisabled || handleSubmit(e);
-    }
-  }
-
   return (
     <div className='login-page'>
       <div className='card card--bg-dark'>
         <div className='card__body'>
           <form onSubmit={handleSubmit}>
-            <div className='form-group'>
-              <input
-                type='email'
-                placeholder='Enter an email'
+            <div className="form-fields-wrapper">
+              <InputField
                 name='email'
                 value={email}
-                onChange={e => onChange(e)}
-                onKeyPress={e => handleKeyPress(e)}
+                placeholder='Enter an email'
+                onChange={onChange}
               />
             </div>
-            <div className='form-group'>
-              <input
+            <div className="form-fields-wrapper">
+              <InputField
                 type='password'
-                placeholder='Enter a Password'
                 name='password'
                 value={password}
-                onChange={e => onChange(e)}
-                onKeyPress={e => handleKeyPress(e)}
+                placeholder='Enter a Password'
+                onChange={onChange}
               />
             </div>
             <input type='submit' value='Sign In' disabled={isSubmitDisabled} />

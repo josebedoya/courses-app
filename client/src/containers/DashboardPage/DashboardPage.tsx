@@ -1,10 +1,9 @@
 import React from 'react'
+import HeadingPage from '../../components/Common/HeadingPage'
 
 const DashboardPage = () => {
   return (
-    <div>
-      <h1>Dashboard Page</h1>
-    </div>
+    <HeadingPage title="Dashboard" />
   )
 }
 

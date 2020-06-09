@@ -13,7 +13,7 @@ export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
 
-  const newToken: string = jwt.sign(jwtPayload, config.jwtSecret, { expiresIn: '10d' });
+  const newToken: string = jwt.sign(jwtPayload, config.jwtSecret);
   res.setHeader('token', newToken);
   next();
 };

@@ -13,4 +13,7 @@ router.get('/:id', [checkJwt], CourseCategoryController.getById);
 // Create a new category
 router.post('/', [checkJwt], CourseCategoryController.create);
 
+// Delete category
+router.delete('/', [checkJwt], CourseCategoryController.delete);
+
 export default router;
