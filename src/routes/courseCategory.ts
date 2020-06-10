@@ -13,6 +13,9 @@ router.get('/:id', [checkJwt], CourseCategoryController.getById);
 // Create a new category
 router.post('/', [checkJwt], CourseCategoryController.create);
 
+// Update category
+router.put('/:id', [checkJwt], CourseCategoryController.update);
+
 // Delete category
 router.delete('/', [checkJwt], CourseCategoryController.delete);
 

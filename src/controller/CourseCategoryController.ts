@@ -13,7 +13,7 @@ export class CourseCategoryController {
     }
   };
 
-  static getById = async (req: Request, res: Response) => {
+  static getById = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
     try {
@@ -27,7 +27,7 @@ export class CourseCategoryController {
     }
   };
 
-  static create = async (req: Request, res: Response) => {
+  static create = async (req: Request, res: Response): Promise<Response> => {
     const { title, type } = req.body;
     const category = new CourseCategory();
 
@@ -52,6 +52,17 @@ export class CourseCategoryController {
     res.json(category);
   };
 
+  static update = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const category = await getRepository(CourseCategory).findOne(id);
+    if (category) {
+      getRepository(CourseCategory).merge(category, req.body);
+      const results = await getRepository(CourseCategory).save(category);
+      return res.json(results);
+    }
+    return res.status(400).json({ message: 'Category not found' });
+  };
+
   static delete = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.body;
     try {
@@ -60,5 +71,5 @@ export class CourseCategoryController {
     } catch (err) {
       return res.status(500).send('Server errror');
     }
-  }
+  };
 }

@@ -4,10 +4,11 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface Props {
   data: Array<object>;
+  handleEdit: (id: number) => void;
   handleDelete: (id: number) => void;
 }
 
-const CategoriesList = ({ data, handleDelete }: Props) => {
+const CategoriesList = ({ data, handleEdit, handleDelete }: Props) => {
   const columns = [
     {
       title: 'Title',
@@ -27,7 +28,7 @@ const CategoriesList = ({ data, handleDelete }: Props) => {
       width: 80,
       render: (text: string, record: any) => (
         <span>
-          <EditOutlined />
+          <EditOutlined onClick={() => handleEdit(record.key)} />
           <Divider type="vertical" />
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
             <DeleteOutlined />

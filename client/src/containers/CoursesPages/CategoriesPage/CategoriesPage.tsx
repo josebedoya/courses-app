@@ -5,7 +5,13 @@ import { Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import { RootState } from './../../../app/rootReducer';
-import { fetchCategories, createCategory, deleteCategory } from './courseCategoriesSlice';
+import {
+  fetchCategories,
+  getCategoryById,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} from './courseCategoriesSlice';
 import HeadingPage from '../../../components/Common/HeadingPage';
 import CategoriesList from './components/CategoriesList';
 import CategoryForm from './components/CategoryForm';
@@ -14,7 +20,10 @@ import { showNotification } from '../../../utils/notifications';
 const CategoriesPage = () => {
   const dispatch = useDispatch();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  const { isSaved, data } = useSelector(
+  const [isFormEdit, setIsFormEdit] = useState<boolean>(false);
+  const [getId, setGetId] = useState<number | null>(null);
+  const [drawerTitle, setDrawerTitle] = useState<string>('Create a new category');
+  const { isSaved, data, getById } = useSelector(
     (state: RootState) => state.courseCategories,
   );
 
@@ -28,30 +37,70 @@ const CategoriesPage = () => {
 
   const onFinish = async (values: any) => {
     const { title, type } = values;
-    const response: any = await dispatch(createCategory({title, type}));
-    if (createCategory.fulfilled.match(response)) {
-      showNotification('success', 'Category created', 'Category was created successfully');
-      setShowDrawer(false);
+    if (isFormEdit) {
+      const response: any = await dispatch(updateCategory({ title, type, id: getId }));
+      if (updateCategory.fulfilled.match(response)) {
+        showNotification(
+          'success',
+          'Category updated',
+          'Category was updated successfully',
+        );
+        setShowDrawer(false);
+      }
+    } else {
+      const response: any = await dispatch(createCategory({ title, type }));
+      if (createCategory.fulfilled.match(response)) {
+        showNotification(
+          'success',
+          'Category created',
+          'Category was created successfully',
+        );
+        setShowDrawer(false);
+      }
     }
   };
 
   const handleDelete = async (id: number) => {
     const response: any = await dispatch(deleteCategory(id));
     if (deleteCategory.fulfilled.match(response)) {
-      showNotification('success', 'Category deleted', 'Category was deleted successfully');
+      showNotification(
+        'success',
+        'Category deleted',
+        'Category was deleted successfully',
+      );
     }
-  }
+  };
+
+  const handleBtnAdd = () => {
+    setDrawerTitle('Create a new category');
+    setShowDrawer(true);
+    setIsFormEdit(false);
+  };
+
+  const handleEdit = (id: number) => {
+    dispatch(getCategoryById(id));
+    setGetId(id);
+    setDrawerTitle('Update category');
+    setShowDrawer(true);
+    setIsFormEdit(true);
+  };
 
   return (
     <>
       <HeadingPage title='Categories' />
       <div className='card'>
         <div className='card__body'>
-          <Button type="primary" size="large" ghost onClick={() => setShowDrawer(true)} icon={<PlusOutlined />}>
+          <Button
+            type='primary'
+            size='large'
+            ghost
+            onClick={handleBtnAdd}
+            icon={<PlusOutlined />}
+          >
             New category
           </Button>
           <Drawer
-            title='Create a new category'
+            title={drawerTitle}
             width={400}
             onClose={() => setShowDrawer(false)}
             destroyOnClose={true}
@@ -81,9 +130,17 @@ const CategoriesPage = () => {
               </div>
             }
           >
-            <CategoryForm onFinish={onFinish} />
+            <CategoryForm
+              onFinish={onFinish}
+              isFormEdit={isFormEdit}
+              formData={getById}
+            />
           </Drawer>
-          <CategoriesList data={data} handleDelete={handleDelete} />
+          <CategoriesList
+            data={data}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+          />
         </div>
       </div>
     </>
