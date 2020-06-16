@@ -1,9 +1,6 @@
-import { RootState } from './../../../app/rootReducer';
-import { notification } from 'antd';
 import {
   createSlice,
   createAsyncThunk,
-  createSelector,
 } from '@reduxjs/toolkit';
 import { API } from '../../../api';
 
@@ -18,7 +15,6 @@ interface IState {
 
 interface IFormFields {
   title: string;
-  type: string;
   id?: number | null;
 }
 
@@ -31,16 +27,16 @@ const initialState: IState = {
   getById: null,
 };
 
-export const fetchCategories = createAsyncThunk(
-  'courseCategories/fetchCategories',
+export const fetchTags = createAsyncThunk(
+  'courseTags/fetchTags',
   async () => {
     try {
-      const response = await API.get('/course-categories');
-      const categories = response.data.map((category: any) => ({
-        ...category,
-        key: category.id,
+      const response = await API.get('/course-tags');
+      const tags = response.data.map((tag: any) => ({
+        ...tag,
+        key: tag.id,
       }));
-      return categories;
+      return tags;
     } catch (err) {
       return err;
       // return rejectWithValue(err.response.data);
@@ -48,11 +44,11 @@ export const fetchCategories = createAsyncThunk(
   },
 );
 
-export const createCategory = createAsyncThunk(
-  'courseCategories/createCategory',
+export const createTag = createAsyncThunk(
+  'courseTags/createTag',
   async (data: IFormFields, { rejectWithValue }) => {
     try {
-      const response = await API.post('/course-categories', data);
+      const response = await API.post('/course-tags', data);
       response.data.key = response.data.id;
       return response.data;
     } catch (err) {
@@ -61,12 +57,12 @@ export const createCategory = createAsyncThunk(
   },
 );
 
-export const updateCategory = createAsyncThunk(
-  'courseCategories/updateCategory',
+export const updateTag = createAsyncThunk(
+  'courseTags/updateTag',
   async (data: IFormFields, { rejectWithValue }) => {
     const { id, ...fields } = data;
     try {
-      const response = await API.put(`/course-categories/${id}`, fields);
+      const response = await API.put(`/course-tags/${id}`, fields);
       response.data.key = response.data.id;
       return response.data;
     } catch (err) {
@@ -75,11 +71,11 @@ export const updateCategory = createAsyncThunk(
   },
 );
 
-export const deleteCategory = createAsyncThunk(
-  'courseCategories/deleteCategory',
+export const deleteTag = createAsyncThunk(
+  'courseTags/deleteTag',
   async (id: number, { rejectWithValue }) => {
     try {
-      await API.delete('/course-categories', { data: { id } });
+      await API.delete('/course-tags', { data: { id } });
       return id;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -87,50 +83,50 @@ export const deleteCategory = createAsyncThunk(
   },
 );
 
-const courseCategoriesSlice = createSlice({
-  name: 'courseCategories',
+const courseTagsSlice = createSlice({
+  name: 'courseTags',
   initialState,
   reducers: {
-    getCategoryById(state, action) {
+    getTagById(state, action) {
       const { payload } = action;
       const item: any = state.data.find((d: any) => d.id === payload);
-      state.getById = { title: item.title, type: item.type };
+      state.getById = { title: item.title };
     },
   },
   extraReducers: builder => {
-    builder.addCase(fetchCategories.pending, state => {
+    builder.addCase(fetchTags.pending, state => {
       state.isLoading = true;
     });
-    builder.addCase(fetchCategories.fulfilled, (state, action) => {
+    builder.addCase(fetchTags.fulfilled, (state, action) => {
       const { payload } = action;
       state.isLoading = false;
       state.data = payload;
     });
-    builder.addCase(fetchCategories.rejected, (state, action) => {
+    builder.addCase(fetchTags.rejected, (state, action) => {
       const { payload } = action;
       state.isLoading = false;
       state.error = payload;
     });
     //
-    builder.addCase(createCategory.pending, state => {
+    builder.addCase(createTag.pending, state => {
       state.isSubmitting = true;
     });
-    builder.addCase(createCategory.fulfilled, (state, action) => {
+    builder.addCase(createTag.fulfilled, (state, action) => {
       const { payload } = action;
       state.isSubmitting = false;
       state.isSaved = true;
       state.data = [...state.data, payload];
     });
-    builder.addCase(createCategory.rejected, (state, action) => {
+    builder.addCase(createTag.rejected, (state, action) => {
       const { payload } = action;
       state.isSubmitting = false;
       state.error = payload;
     });
     //
-    builder.addCase(updateCategory.pending, state => {
+    builder.addCase(updateTag.pending, state => {
       state.isSubmitting = true;
     });
-    builder.addCase(updateCategory.fulfilled, (state, action) => {
+    builder.addCase(updateTag.fulfilled, (state, action) => {
       const { payload } = action;
       state.isSubmitting = false;
       const updateData = state.data.reduce((acc: any, newData: any) => {
@@ -142,21 +138,21 @@ const courseCategoriesSlice = createSlice({
       }, []);
       state.data = updateData as [];
     });
-    builder.addCase(updateCategory.rejected, (state, action) => {
+    builder.addCase(updateTag.rejected, (state, action) => {
       const { payload } = action;
       state.isSubmitting = false;
       state.error = payload;
     });
     //
-    builder.addCase(deleteCategory.pending, state => {
+    builder.addCase(deleteTag.pending, state => {
       state.isSubmitting = true;
     });
-    builder.addCase(deleteCategory.fulfilled, (state, action) => {
+    builder.addCase(deleteTag.fulfilled, (state, action) => {
       const { payload } = action;
       state.isSubmitting = false;
       state.data = state.data.filter((item: any) => item.id !== payload);
     });
-    builder.addCase(deleteCategory.rejected, (state, action) => {
+    builder.addCase(deleteTag.rejected, (state, action) => {
       const { payload } = action;
       state.isSubmitting = false;
       state.error = payload;
@@ -164,6 +160,6 @@ const courseCategoriesSlice = createSlice({
   },
 });
 
-export const { getCategoryById } = courseCategoriesSlice.actions;
+export const { getTagById } = courseTagsSlice.actions;
 
-export default courseCategoriesSlice.reducer;
+export default courseTagsSlice.reducer;

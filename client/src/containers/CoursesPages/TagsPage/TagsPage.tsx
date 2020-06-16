@@ -6,29 +6,29 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { RootState } from './../../../app/rootReducer';
 import {
-  fetchCategories,
-  getCategoryById,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-} from './courseCategoriesSlice';
+  fetchTags,
+  getTagById,
+  createTag,
+  updateTag,
+  deleteTag,
+} from './courseTagsSlice';
 import HeadingPage from '../../../components/Common/HeadingPage';
-import CategoriesList from './components/CategoriesList';
-import CategoryForm from './components/CategoryForm';
+import TagsList from './components/TagsList';
+import TagForm from './components/TagForm';
 import { showNotification } from '../../../utils/notifications';
 
-const CategoriesPage = () => {
+const TagsPage = () => {
   const dispatch = useDispatch();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [isFormEdit, setIsFormEdit] = useState<boolean>(false);
   const [getId, setGetId] = useState<number | null>(null);
-  const [drawerTitle, setDrawerTitle] = useState<string>('Create a new category');
+  const [drawerTitle, setDrawerTitle] = useState<string>('Create a new tag');
   const { isSaved, data, getById } = useSelector(
-    (state: RootState) => state.courseCategories,
+    (state: RootState) => state.courseTags,
   );
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    dispatch(fetchTags());
   }, []);
 
   useEffect(() => {
@@ -36,24 +36,24 @@ const CategoriesPage = () => {
   }, [isSaved]);
 
   const onFinish = async (values: any) => {
-    const { title, type } = values;
+    const { title } = values;
     if (isFormEdit) {
-      const response: any = await dispatch(updateCategory({ title, type, id: getId }));
-      if (updateCategory.fulfilled.match(response)) {
+      const response: any = await dispatch(updateTag({ title, id: getId }));
+      if (updateTag.fulfilled.match(response)) {
         showNotification(
           'success',
-          'Category updated',
-          'Category was updated successfully',
+          'Tag updated',
+          'Tag was updated successfully',
         );
         setShowDrawer(false);
       }
     } else {
-      const response: any = await dispatch(createCategory({ title, type }));
-      if (createCategory.fulfilled.match(response)) {
+      const response: any = await dispatch(createTag({ title }));
+      if (createTag.fulfilled.match(response)) {
         showNotification(
           'success',
-          'Category created',
-          'Category was created successfully',
+          'Tag created',
+          'Tag was created successfully',
         );
         setShowDrawer(false);
       }
@@ -61,33 +61,33 @@ const CategoriesPage = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const response: any = await dispatch(deleteCategory(id));
-    if (deleteCategory.fulfilled.match(response)) {
+    const response: any = await dispatch(deleteTag(id));
+    if (deleteTag.fulfilled.match(response)) {
       showNotification(
         'success',
-        'Category deleted',
-        'Category was deleted successfully',
+        'Tag deleted',
+        'Tag was deleted successfully',
       );
     }
   };
 
   const handleBtnAdd = () => {
-    setDrawerTitle('Create a new category');
+    setDrawerTitle('Create a new tag');
     setShowDrawer(true);
     setIsFormEdit(false);
   };
 
   const handleEdit = (id: number) => {
-    dispatch(getCategoryById(id));
+    dispatch(getTagById(id));
     setGetId(id);
-    setDrawerTitle('Update category');
+    setDrawerTitle('Update tag');
     setShowDrawer(true);
     setIsFormEdit(true);
   };
 
   return (
     <>
-      <HeadingPage title='Categories' />
+      <HeadingPage title='Tags' />
       <div className='card'>
         <div className='card__body'>
           <div className="actions-top">
@@ -98,7 +98,7 @@ const CategoriesPage = () => {
               onClick={handleBtnAdd}
               icon={<PlusOutlined />}
             >
-              New category
+              New tag
             </Button>
           </div>
           <Drawer
@@ -132,13 +132,13 @@ const CategoriesPage = () => {
               </div>
             }
           >
-            <CategoryForm
+            <TagForm
               onFinish={onFinish}
               isFormEdit={isFormEdit}
               formData={getById}
             />
           </Drawer>
-          <CategoriesList
+          <TagsList
             data={data}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
@@ -149,4 +149,4 @@ const CategoriesPage = () => {
   );
 };
 
-export default CategoriesPage;
+export default TagsPage;

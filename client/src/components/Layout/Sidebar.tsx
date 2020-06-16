@@ -27,7 +27,9 @@ const Sidebar = () => {
               </span>
             }
           >
-            <Menu.Item key='2'>Tags</Menu.Item>
+            <Menu.Item key='2'>
+              <Link to="/courses/tags">Tags</Link>
+            </Menu.Item>
             <Menu.Item key='3'>
               <Link to="/courses/categories">Categories</Link>
             </Menu.Item>

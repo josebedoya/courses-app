@@ -24,10 +24,8 @@ export const fetchLoggedUser = createAsyncThunk(
   async (id: number, { rejectWithValue }) => {
     try {
       const response = await API.get(`/auth/users/${id}`);
-      console.log('user response: ', response);
       return response.data;
     } catch (err) {
-      console.log('user error: ', err.response.data);
       return rejectWithValue(err.response.data);
     }
   },

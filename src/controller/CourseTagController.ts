@@ -48,6 +48,27 @@ export class CourseTagController {
     }
 
     //
-    res.json({ message: 'Tag created' });
+    res.json(tag);
+  };
+
+  static update = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const tag = await getRepository(CourseTag).findOne(id);
+    if (tag) {
+      getRepository(CourseTag).merge(tag, req.body);
+      const results = await getRepository(CourseTag).save(tag);
+      return res.json(results);
+    }
+    return res.status(400).json({ message: 'Tag not found' });
+  };
+
+  static delete = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.body;
+    try {
+      const result = await getRepository(CourseTag).delete(id);
+      return res.json(result);
+    } catch (err) {
+      return res.status(500).send('Server errror');
+    }
   };
 }

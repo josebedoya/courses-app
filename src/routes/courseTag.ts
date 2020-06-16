@@ -13,4 +13,10 @@ router.get('/:id', CourseTagController.getById);
 // Create a new tag
 router.post('/', [checkJwt], CourseTagController.create);
 
+// Update tag
+router.put('/:id', [checkJwt], CourseTagController.update);
+
+// Delete tag
+router.delete('/', [checkJwt], CourseTagController.delete);
+
 export default router;

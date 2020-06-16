@@ -20,5 +20,11 @@
 
   &__body {
     padding: 1.5rem;
+    .actions-top {
+      margin-bottom: 20px;
+    }
+    .actions-bottom {
+      margin-top: 20px;
+    }
   }
 }
