@@ -6,29 +6,29 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { RootState } from './../../../app/rootReducer';
 import {
-  fetchTags,
-  getTagById,
-  createTag,
-  updateTag,
-  deleteTag,
-} from './courseTagsSlice';
+  fetchCourses,
+  getCourseById,
+  createCourse,
+  updateCourse,
+  deleteCourse,
+} from './coursesSlice';
 import HeadingPage from '../../../components/Common/HeadingPage';
-import TagsList from './components/TagsList';
-import TagForm from './components/TagForm';
+import CoursesList from './components/CoursesList';
+import CourseForm from './components/CourseForm';
 import { showNotification } from '../../../utils/notifications';
 
-const TagsPage = () => {
+const CoursesPage = () => {
   const dispatch = useDispatch();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
   const [isFormEdit, setIsFormEdit] = useState<boolean>(false);
   const [getId, setGetId] = useState<number | null>(null);
-  const [drawerTitle, setDrawerTitle] = useState<string>('Create a new tag');
+  const [drawerTitle, setDrawerTitle] = useState<string>('Create a new course');
   const { isSaved, data, getById } = useSelector(
-    (state: RootState) => state.courseTags,
+    (state: RootState) => state.courses,
   );
 
   useEffect(() => {
-    dispatch(fetchTags());
+    dispatch(fetchCourses());
   }, [dispatch]);
 
   useEffect(() => {
@@ -36,24 +36,24 @@ const TagsPage = () => {
   }, [isSaved]);
 
   const onFinish = async (values: any) => {
-    const { title } = values;
+    const { title, type } = values;
     if (isFormEdit) {
-      const response: any = await dispatch(updateTag({ title, id: getId }));
-      if (updateTag.fulfilled.match(response)) {
+      const response: any = await dispatch(updateCourse({ title, type, id: getId }));
+      if (updateCourse.fulfilled.match(response)) {
         showNotification(
           'success',
-          'Tag updated',
-          'Tag was updated successfully',
+          'Course updated',
+          'Course was updated successfully',
         );
         setShowDrawer(false);
       }
     } else {
-      const response: any = await dispatch(createTag({ title }));
-      if (createTag.fulfilled.match(response)) {
+      const response: any = await dispatch(createCourse({ title, type }));
+      if (createCourse.fulfilled.match(response)) {
         showNotification(
           'success',
-          'Tag created',
-          'Tag was created successfully',
+          'Course created',
+          'Course was created successfully',
         );
         setShowDrawer(false);
       }
@@ -61,33 +61,33 @@ const TagsPage = () => {
   };
 
   const handleDelete = async (id: number) => {
-    const response: any = await dispatch(deleteTag(id));
-    if (deleteTag.fulfilled.match(response)) {
+    const response: any = await dispatch(deleteCourse(id));
+    if (deleteCourse.fulfilled.match(response)) {
       showNotification(
         'success',
-        'Tag deleted',
-        'Tag was deleted successfully',
+        'Course deleted',
+        'Course was deleted successfully',
       );
     }
   };
 
   const handleBtnAdd = () => {
-    setDrawerTitle('Create a new tag');
+    setDrawerTitle('Create a new course');
     setShowDrawer(true);
     setIsFormEdit(false);
   };
 
   const handleEdit = (id: number) => {
-    dispatch(getTagById(id));
+    dispatch(getCourseById(id));
     setGetId(id);
-    setDrawerTitle('Update tag');
+    setDrawerTitle('Update course');
     setShowDrawer(true);
     setIsFormEdit(true);
   };
 
   return (
     <>
-      <HeadingPage title='Tags' />
+      <HeadingPage title='Courses' />
       <div className='card'>
         <div className='card__body'>
           <div className="actions-top">
@@ -98,7 +98,7 @@ const TagsPage = () => {
               onClick={handleBtnAdd}
               icon={<PlusOutlined />}
             >
-              New tag
+              New course
             </Button>
           </div>
           <Drawer
@@ -132,13 +132,13 @@ const TagsPage = () => {
               </div>
             }
           >
-            <TagForm
+            <CourseForm
               onFinish={onFinish}
               isFormEdit={isFormEdit}
               formData={getById}
             />
           </Drawer>
-          <TagsList
+          <CoursesList
             data={data}
             handleEdit={handleEdit}
             handleDelete={handleDelete}
@@ -149,4 +149,4 @@ const TagsPage = () => {
   );
 };
 
-export default TagsPage;
+export default CoursesPage;

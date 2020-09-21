@@ -29,7 +29,7 @@ const CategoriesPage = () => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (isSaved) setShowDrawer(false);

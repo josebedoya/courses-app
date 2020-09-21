@@ -1,4 +1,4 @@
-import { configureStore, Action, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 import rootReducer from './rootReducer';
 
@@ -19,17 +19,3 @@ if (process.env.NODE_ENV === 'development' && (module as any).hot) {
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
-
-// import { createStore, applyMiddleware } from 'redux';
-// import createSagaMiddleware from 'redux-saga';
-
-// import rootReducer from './rootReducer';
-// import sagas from './root-saga';
-
-// const sagaMiddleware = createSagaMiddleware();
-
-// const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
-
-// sagaMiddleware.run(sagas);
-
-// export default store;

@@ -33,7 +33,9 @@ const Sidebar = () => {
             <Menu.Item key='3'>
               <Link to="/courses/categories">Categories</Link>
             </Menu.Item>
-            <Menu.Item key='4'>Courses</Menu.Item>
+            <Menu.Item key='4'>
+              <Link to="/courses">Courses</Link>
+            </Menu.Item>
           </SubMenu>
         </Menu>
       </div>

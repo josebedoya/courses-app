@@ -13,7 +13,7 @@ export class CourseController {
     }
   };
 
-  static getById = async (req: Request, res: Response) => {
+  static getById = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
 
     try {
@@ -27,7 +27,7 @@ export class CourseController {
     }
   };
 
-  static create = async (req: Request, res: Response) => {
+  static create = async (req: Request, res: Response): Promise<Response> => {
     const { title, link, courseCategoryId, languageId } = req.body;
     const course = new Course();
 
@@ -49,8 +49,28 @@ export class CourseController {
     } catch (err) {
       return res.status(409).json({ message: 'Course already exists' });
     }
-
     //
-    res.json({ message: 'Course created' });
+    res.json(course);
+  };
+
+  static update = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.params;
+    const course = await getRepository(Course).findOne(id);
+    if (course) {
+      getRepository(Course).merge(course, req.body);
+      const results = await getRepository(Course).save(course);
+      return res.json(results);
+    }
+    return res.status(400).json({ message: 'Course not found' });
+  };
+
+  static delete = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.body;
+    try {
+      const result = await getRepository(Course).delete(id);
+      return res.json(result);
+    } catch (err) {
+      return res.status(500).send('Server errror');
+    }
   };
 }

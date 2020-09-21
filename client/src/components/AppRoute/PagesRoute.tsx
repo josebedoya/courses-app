@@ -9,6 +9,7 @@ import NotFoundPage from '../../containers/notFound/NotFoundPage';
 import DashboardPage from '../../containers/DashboardPage/DashboardPage';
 import CategoriesPage from '../../containers/CoursesPages/CategoriesPage/CategoriesPage';
 import TagsPage from '../../containers/CoursesPages/TagsPage/TagsPage';
+import CoursesPage from '../../containers/CoursesPages/CoursesPage/CoursesPage';
 
 export const PagesRoute = () => {
   return (
@@ -24,6 +25,11 @@ export const PagesRoute = () => {
         exact
         path='/courses/tags'
         component={TagsPage}
+      />
+      <PrivateRoute
+        exact
+        path='/courses'
+        component={CoursesPage}
       />
       <Route component={NotFoundPage} />
     </Switch>
