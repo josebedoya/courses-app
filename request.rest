@@ -1,0 +1,22 @@
+POST http://localhost:3000/api/auth/signin
+Content-Type: application/json
+
+{
+	"email": "me@josebedoya.co",
+	"password": "123456"
+}
+
+###
+
+POST http://localhost:3000/api/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImZpcnN0TmFtZSI6Ikpvc2UiLCJsYXN0TmFtZSI6IkJlZG95YSIsImVtYWlsIjoibWVAam9zZWJlZG95YS5jbyIsImlhdCI6MTYwMDc5NDg4Mn0.Ja3eofmRwSSh_UECo6yF7OtXipNcYUttpPd9MWs82T4"
+}
+
+###
+
+GET http://localhost:3001/api/users
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1lQGpvc2ViZWRveWEuY28iLCJpYXQiOjE2MDA3OTQ4OTQsImV4cCI6MTYwMDc5NDkxNH0.aVpSxHRnah9mxlR14TkuAC2dpM7xgKovarAH4dVA7Vg

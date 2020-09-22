@@ -1,3 +1,4 @@
+require('dotenv').config();
 import { getRepository } from 'typeorm';
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
@@ -28,8 +29,9 @@ class AuthController {
             lastName: user.lastName,
             email: user.email,
           }
-          const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '10d' });
-          res.json({ token });
+          const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
+          const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
+          res.json({ accessToken, refreshToken });
         } else {
           return res.status(400).json({ message: 'Invalid credentials' });
         }
@@ -39,6 +41,22 @@ class AuthController {
     }
 
   };
+
+  static refreshToken = async(req: Request, res: Response) => {
+    try {
+      const { refreshToken } = req.body;
+      if (!refreshToken) {
+        return res.status(403).json({ message: 'User not authenticated' });
+      }
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ message: 'User not authenticated' });
+        const accessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
+        res.json({ accessToken });
+      });
+    } catch (err) {
+      res.status(500).send('Server error');
+    }
+  }
 }
 
 export default AuthController;

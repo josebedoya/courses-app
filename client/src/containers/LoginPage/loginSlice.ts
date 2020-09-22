@@ -29,12 +29,12 @@ export const loginRequest = createAsyncThunk(
   async (data: IFormFields, { rejectWithValue }) => {
     try {
       const response = await API.post('/auth/signin', data);
-      const { token } = response.data;
-      localStorage.setItem('token', token);
+      const { accessToken } = response.data;
+      localStorage.setItem('token', accessToken);
       // set token to Auth header
-      setAuthToken(token);
+      setAuthToken(accessToken);
       // decode token to get user data
-      const decoded = jwt_decode(token);
+      const decoded = jwt_decode(accessToken);
       const userData = {...(decoded as {}), ...response.data};
       return userData;
     } catch (err) {
