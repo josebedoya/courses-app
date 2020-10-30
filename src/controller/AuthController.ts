@@ -29,8 +29,8 @@ class AuthController {
             lastName: user.lastName,
             email: user.email,
           }
-          const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
-          const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
+          const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' });
+          const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '10h' })
           res.json({ accessToken, refreshToken });
         } else {
           return res.status(400).json({ message: 'Invalid credentials' });
@@ -50,7 +50,7 @@ class AuthController {
       }
       jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.status(403).json({ message: 'User not authenticated' });
-        const accessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
+        const accessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20m' });
         res.json({ accessToken });
       });
     } catch (err) {
