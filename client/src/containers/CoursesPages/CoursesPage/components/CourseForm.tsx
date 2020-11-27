@@ -7,9 +7,10 @@ interface Props {
   onFinish: (data: object) => void;
   isFormEdit: boolean;
   formData: any | null;
+  categories: any | null;
 }
 
-const CourseForm = ({ onFinish, isFormEdit, formData }: Props) => {
+const CourseForm = ({ onFinish, isFormEdit, formData, categories }: Props) => {
   const linkSelectBefore = (
     <Select defaultValue="http://" className="select-before">
       <Option value="http://">http://</Option>
@@ -64,9 +65,7 @@ const CourseForm = ({ onFinish, isFormEdit, formData }: Props) => {
             rules={[{ required: true, message: 'Please choose the category' }]}
           >
             <Select placeholder='Please choose the category'>
-              <Option value='1'>Cat 1</Option>
-              <Option value='2'>Cat 2</Option>
-              <Option value='3'>Cat 3</Option>
+              {categories.map((item: any) => <Option value={item.id}>{item.title}</Option>)}
             </Select>
           </Form.Item>
         </Col>

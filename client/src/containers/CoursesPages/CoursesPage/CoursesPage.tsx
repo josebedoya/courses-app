@@ -12,6 +12,9 @@ import {
   updateCourse,
   deleteCourse,
 } from './coursesSlice';
+
+import { fetchCategories } from '../CategoriesPage/courseCategoriesSlice';
+
 import HeadingPage from '../../../components/Common/HeadingPage';
 import CoursesList from './components/CoursesList';
 import CourseForm from './components/CourseForm';
@@ -26,9 +29,11 @@ const CoursesPage = () => {
   const { isSaved, data, getById } = useSelector(
     (state: RootState) => state.courses,
   );
+  const { data: categories } = useSelector((state: RootState) => state.courseCategories);
 
   useEffect(() => {
     dispatch(fetchCourses());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   useEffect(() => {
@@ -136,6 +141,7 @@ const CoursesPage = () => {
               onFinish={onFinish}
               isFormEdit={isFormEdit}
               formData={getById}
+              categories={categories}
             />
           </Drawer>
           <CoursesList

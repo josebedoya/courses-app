@@ -10,7 +10,7 @@ const Sidebar = () => {
     <aside className='sidebar'>
       <div className='sidebar__menu'>
         <Menu
-          style={{ width: 240 }}
+          style={{ width: 260 }}
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
           mode='inline'
