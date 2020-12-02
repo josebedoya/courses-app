@@ -9,6 +9,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  JoinColumn,
 } from 'typeorm';
 import { IsNotEmpty, IsFQDN } from 'class-validator';
 
@@ -45,15 +46,25 @@ export class Course {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  //
+
+  @Column()
+  courseCategoryId: number;
+
+  @Column()
+  languageId: number;
+
   // Relations
 
   @OneToMany(type => Chapter, chapter => chapter.course)
   chapters: Chapter[];
 
   @ManyToOne(type => CourseCategory, courseCategory => courseCategory.course)
+  @JoinColumn({ name: 'courseCategoryId' })
   courseCategory: CourseCategory;
 
   @ManyToOne(type => Language, language => language.course)
+  @JoinColumn({ name: 'languageId' })
   language: Language;
 
   @ManyToMany(type => CourseTag)

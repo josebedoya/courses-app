@@ -30,6 +30,7 @@ const CoursesPage = () => {
     (state: RootState) => state.courses,
   );
   const { data: categories } = useSelector((state: RootState) => state.courseCategories);
+  const { data: languages } = useSelector((state: RootState) => state.languages);
 
   useEffect(() => {
     dispatch(fetchCourses());
@@ -41,9 +42,9 @@ const CoursesPage = () => {
   }, [isSaved]);
 
   const onFinish = async (values: any) => {
-    const { title, type } = values;
+    const { title, link, courseCategoryId, languageId } = values;
     if (isFormEdit) {
-      const response: any = await dispatch(updateCourse({ title, type, id: getId }));
+      const response: any = await dispatch(updateCourse({ title, link, courseCategoryId, languageId, id: getId }));
       if (updateCourse.fulfilled.match(response)) {
         showNotification(
           'success',
@@ -53,7 +54,7 @@ const CoursesPage = () => {
         setShowDrawer(false);
       }
     } else {
-      const response: any = await dispatch(createCourse({ title, type }));
+      const response: any = await dispatch(createCourse({ title, link, courseCategoryId, languageId }));
       if (createCourse.fulfilled.match(response)) {
         showNotification(
           'success',
@@ -142,6 +143,7 @@ const CoursesPage = () => {
               isFormEdit={isFormEdit}
               formData={getById}
               categories={categories}
+              languages={languages}
             />
           </Drawer>
           <CoursesList

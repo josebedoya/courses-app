@@ -8,16 +8,11 @@ interface Props {
   isFormEdit: boolean;
   formData: any | null;
   categories: any | null;
+  languages: any | null;
 }
 
-const CourseForm = ({ onFinish, isFormEdit, formData, categories }: Props) => {
-  const linkSelectBefore = (
-    <Select defaultValue="http://" className="select-before">
-      <Option value="http://">http://</Option>
-      <Option value="https://">https://</Option>
-    </Select>
-  );
-
+const CourseForm = ({ onFinish, isFormEdit, formData, categories, languages }: Props) => {
+  console.log(formData);
   return (
     <Form layout='vertical' id='myForm' hideRequiredMark onFinish={onFinish}>
       <Row gutter={16}>
@@ -43,16 +38,16 @@ const CourseForm = ({ onFinish, isFormEdit, formData, categories }: Props) => {
           <Form.Item
             name='link'
             label='Website'
-            initialValue={isFormEdit ? formData.title : null}
+            initialValue={isFormEdit ? formData.link : null}
             rules={[
               {
                 required: true,
                 whitespace: true,
-                message: 'Please enter a title',
+                message: 'Please enter the URL',
               },
             ]}
           >
-            <Input addonBefore={linkSelectBefore} placeholder='Please enter a title' />
+            <Input placeholder='Please enter the URL' />
           </Form.Item>
         </Col>
       </Row>
@@ -79,9 +74,7 @@ const CourseForm = ({ onFinish, isFormEdit, formData, categories }: Props) => {
             rules={[{ required: true, message: 'Please choose the language' }]}
           >
             <Select placeholder='Please choose the language'>
-              <Option value='1'>English</Option>
-              <Option value='2'>Spanish</Option>
-              <Option value='3'>French</Option>
+              {languages.map((item: any) => <Option value={item.id}>{item.title}</Option>)}
             </Select>
           </Form.Item>
         </Col>

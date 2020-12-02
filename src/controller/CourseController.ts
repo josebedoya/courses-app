@@ -7,6 +7,7 @@ export class CourseController {
   static getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
       const courses = await getRepository(Course).find();
+      console.log(courses);
       return res.json(courses);
     } catch (err) {
       res.status(500).send('Server Error');

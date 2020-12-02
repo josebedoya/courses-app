@@ -15,7 +15,9 @@ interface IState {
 
 interface IFormFields {
   title: string;
-  type: string;
+  link: string;
+  courseCategoryId: number;
+  languageId: number;
   id?: number | null;
 }
 
@@ -91,7 +93,7 @@ const coursesSlice = createSlice({
     getCourseById(state, action) {
       const { payload } = action;
       const item: any = state.data.find((d: any) => d.id === payload);
-      state.getById = { title: item.title, link: item.link };
+      state.getById = { title: item.title, link: item.link, courseCategoryId: item.courseCategoryId, languageId: item.languageId };
     },
   },
   extraReducers: builder => {
