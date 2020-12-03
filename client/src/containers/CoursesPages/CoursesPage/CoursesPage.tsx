@@ -7,10 +7,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { RootState } from './../../../app/rootReducer';
 import {
   fetchCourses,
-  getCourseById,
   createCourse,
   updateCourse,
   deleteCourse,
+  getCourseById,
+  getChaptersByCourseId,
 } from './coursesSlice';
 
 import { fetchCategories } from '../CategoriesPage/courseCategoriesSlice';
@@ -18,15 +19,18 @@ import { fetchCategories } from '../CategoriesPage/courseCategoriesSlice';
 import HeadingPage from '../../../components/Common/HeadingPage';
 import CoursesList from './components/CoursesList';
 import CourseForm from './components/CourseForm';
+import ChapterForm from './components/ChapterForm';
 import { showNotification } from '../../../utils/notifications';
 
 const CoursesPage = () => {
   const dispatch = useDispatch();
   const [showDrawer, setShowDrawer] = useState<boolean>(false);
+  const [showChapterDrawer, setShowChapterDrawer] = useState<boolean>(false);
   const [isFormEdit, setIsFormEdit] = useState<boolean>(false);
+  const [isFormChapterEdit, setIsFormChapterEdit] = useState<boolean>(false);
   const [getId, setGetId] = useState<number | null>(null);
   const [drawerTitle, setDrawerTitle] = useState<string>('Create a new course');
-  const { isSaved, data, getById } = useSelector(
+  const { isSaved, data, getById, chapterById } = useSelector(
     (state: RootState) => state.courses,
   );
   const { data: categories } = useSelector((state: RootState) => state.courseCategories);
@@ -65,6 +69,8 @@ const CoursesPage = () => {
       }
     }
   };
+
+  const onChapterFinish = () => {};
 
   const handleDelete = async (id: number) => {
     const response: any = await dispatch(deleteCourse(id));
@@ -145,6 +151,49 @@ const CoursesPage = () => {
               categories={categories}
               languages={languages}
             />
+            {isFormEdit &&
+              <>
+                <Button type="primary" onClick={() => setShowChapterDrawer(true)}>
+                  Add a chapter
+                </Button>
+                <Drawer
+                  title="Add a chapter"
+                  width={400}
+                  closable={false}
+                  onClose={() => setShowChapterDrawer(false)}
+                  visible={showChapterDrawer}
+                  bodyStyle={{ paddingBottom: 80 }}
+                  footer={
+                    <div
+                      style={{
+                        textAlign: 'right',
+                      }}
+                    >
+                      <Button
+                        onClick={() => setShowChapterDrawer(false)}
+                        style={{ marginRight: 8 }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type='primary'
+                        htmlType='submit'
+                        form='myForm'
+                        key='submit'
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  }
+                >
+                  <ChapterForm
+                    onFinish={onChapterFinish}
+                    isFormEdit={isFormChapterEdit}
+                    formData={chapterById}
+                  />
+                </Drawer>
+              </>
+            }
           </Drawer>
           <CoursesList
             data={data}

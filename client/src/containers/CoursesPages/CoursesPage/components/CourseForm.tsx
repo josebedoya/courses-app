@@ -12,7 +12,6 @@ interface Props {
 }
 
 const CourseForm = ({ onFinish, isFormEdit, formData, categories, languages }: Props) => {
-  console.log(formData);
   return (
     <Form layout='vertical' id='myForm' hideRequiredMark onFinish={onFinish}>
       <Row gutter={16}>

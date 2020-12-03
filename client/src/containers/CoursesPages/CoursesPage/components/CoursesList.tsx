@@ -23,6 +23,18 @@ const CoursesList = ({ data, handleEdit, handleDelete }: Props) => {
       sorter: (a: any, b: any) => a.link < b.link ? -1 : (a.link > b.link ? 1 : 0)
     },
     {
+      title: 'Category',
+      dataIndex: ['courseCategory', 'title'],
+      key: 'category',
+      sorter: (a: any, b: any) => a.courseCategory.title < b.courseCategory.title ? -1 : (a.courseCategory.title > b.courseCategory.title ? 1 : 0)
+    },
+    {
+      title: 'Language',
+      dataIndex: ['language', 'title'],
+      key: 'language',
+      sorter: (a: any, b: any) => a.language.title < b.language.title ? -1 : (a.language.title > b.language.title ? 1 : 0)
+    },
+    {
       title: 'Action',
       key: 'action',
       width: 80,

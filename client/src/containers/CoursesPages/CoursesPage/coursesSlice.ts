@@ -11,6 +11,7 @@ interface IState {
   error: unknown | null;
   data: Array<object>;
   getById: object | null;
+  chapterById: object | null;
 }
 
 interface IFormFields {
@@ -28,6 +29,7 @@ const initialState: IState = {
   error: null,
   data: [],
   getById: null,
+  chapterById: null,
 };
 
 export const fetchCourses = createAsyncThunk(
@@ -94,6 +96,10 @@ const coursesSlice = createSlice({
       const { payload } = action;
       const item: any = state.data.find((d: any) => d.id === payload);
       state.getById = { title: item.title, link: item.link, courseCategoryId: item.courseCategoryId, languageId: item.languageId };
+    },
+    getChaptersByCourseId(state, action) {
+      const { payload } = action;
+      console.log(payload);
     },
   },
   extraReducers: builder => {
@@ -163,6 +169,6 @@ const coursesSlice = createSlice({
   },
 });
 
-export const { getCourseById } = coursesSlice.actions;
+export const { getCourseById, getChaptersByCourseId } = coursesSlice.actions;
 
 export default coursesSlice.reducer;

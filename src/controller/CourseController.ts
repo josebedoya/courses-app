@@ -6,8 +6,7 @@ import { validate } from 'class-validator';
 export class CourseController {
   static getAll = async (req: Request, res: Response): Promise<Response> => {
     try {
-      const courses = await getRepository(Course).find();
-      console.log(courses);
+      const courses = await getRepository(Course).find({ relations: ['courseCategory', 'language', 'chapters'] });
       return res.json(courses);
     } catch (err) {
       res.status(500).send('Server Error');
@@ -46,21 +45,26 @@ export class CourseController {
     }
 
     try {
-      await getRepository(Course).save(course);
+      const result = await getRepository(Course).save(course);
+      const data = await getRepository(Course).findOne(result.id, { relations: ['courseCategory', 'language'] });
+      return res.json(data);
     } catch (err) {
       return res.status(409).json({ message: 'Course already exists' });
     }
     //
-    res.json(course);
   };
 
   static update = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
+    const { courseCategoryId, languageId } = req.body; // Relations
     const course = await getRepository(Course).findOne(id);
     if (course) {
+      course.courseCategory = courseCategoryId;
+      course.language = languageId;
       getRepository(Course).merge(course, req.body);
-      const results = await getRepository(Course).save(course);
-      return res.json(results);
+      const result = await getRepository(Course).save(course);
+      const data = await getRepository(Course).findOne(result.id, { relations: ['courseCategory', 'language', 'chapters'] });
+      return res.json(data);
     }
     return res.status(400).json({ message: 'Course not found' });
   };
