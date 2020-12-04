@@ -8,6 +8,26 @@ interface Props {
   handleDelete: (id: number) => void;
 }
 
+const expandedRowRender = (record: any) => {
+  const columns = [
+    {
+      title: 'Chapter title', dataIndex: 'title', key: 'title'
+    },
+    {
+      title: 'Duration', dataIndex: 'duration', key: 'duration'
+    },
+  ];
+  return (
+    <Table
+      rowKey={record => record.id}
+      size="small"
+      columns={columns}
+      dataSource={record}
+      pagination={false}
+    />
+  );
+}
+
 const CoursesList = ({ data, handleEdit, handleDelete }: Props) => {
   const columns = [
     {
@@ -51,7 +71,16 @@ const CoursesList = ({ data, handleEdit, handleDelete }: Props) => {
   ];
 
   return (
-    <Table columns={columns} dataSource={data} />
+    <Table
+      rowKey={(data: any) => data.id}
+      columns={columns}
+      dataSource={data}
+      size="small"
+      // expandable={{expandedRowRender}}
+      expandedRowRender={(record: any) =>
+        record.chapters.length >= 1 ? expandedRowRender(record.chapters) : ''
+      }
+    />
   )
 }
 

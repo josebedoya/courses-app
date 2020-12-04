@@ -59,7 +59,7 @@ const CourseForm = ({ onFinish, isFormEdit, formData, categories, languages }: P
             rules={[{ required: true, message: 'Please choose the category' }]}
           >
             <Select placeholder='Please choose the category'>
-              {categories.map((item: any) => <Option value={item.id}>{item.title}</Option>)}
+              {categories.map((item: any) => <Option key={item.id} value={item.id}>{item.title}</Option>)}
             </Select>
           </Form.Item>
         </Col>
@@ -73,7 +73,7 @@ const CourseForm = ({ onFinish, isFormEdit, formData, categories, languages }: P
             rules={[{ required: true, message: 'Please choose the language' }]}
           >
             <Select placeholder='Please choose the language'>
-              {languages.map((item: any) => <Option value={item.id}>{item.title}</Option>)}
+              {languages.map((item: any) => <Option key={item.id} value={item.id}>{item.title}</Option>)}
             </Select>
           </Form.Item>
         </Col>

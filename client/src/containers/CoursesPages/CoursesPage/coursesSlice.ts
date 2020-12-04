@@ -22,6 +22,12 @@ interface IFormFields {
   id?: number | null;
 }
 
+interface IFormChapterFields {
+  title: string;
+  duration: any;
+  courseId: number | null;
+}
+
 const initialState: IState = {
   isLoading: false,
   isSubmitting: false,
@@ -88,6 +94,19 @@ export const deleteCourse = createAsyncThunk(
   },
 );
 
+export const createChapter = createAsyncThunk(
+  'courses/createChapter',
+  async (data: IFormChapterFields, { rejectWithValue }) => {
+    try {
+      const response = await API.post(`/chapters`, data);
+      response.data.key = response.data.id;
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
 const coursesSlice = createSlice({
   name: 'courses',
   initialState,
@@ -95,7 +114,7 @@ const coursesSlice = createSlice({
     getCourseById(state, action) {
       const { payload } = action;
       const item: any = state.data.find((d: any) => d.id === payload);
-      state.getById = { title: item.title, link: item.link, courseCategoryId: item.courseCategoryId, languageId: item.languageId };
+      state.getById = { id: item.id, title: item.title, link: item.link, courseCategoryId: item.courseCategoryId, languageId: item.languageId };
     },
     getChaptersByCourseId(state, action) {
       const { payload } = action;
@@ -166,6 +185,30 @@ const coursesSlice = createSlice({
       state.isSubmitting = false;
       state.error = payload;
     });
+
+    //
+
+    builder.addCase(createChapter.pending, state => {
+      state.isSubmitting = true;
+    });
+    builder.addCase(createChapter.fulfilled, (state, action) => {
+      const { payload } = action;
+      state.isSubmitting = false;
+      state.isSaved = true;
+      const updateData = state.data.reduce((acc: any, newData: any) => {
+        if (newData.id === payload.course) {
+          newData.chapters.push(payload);
+        }
+        return [...acc, newData];
+      }, []);
+      state.data = updateData as [];
+    });
+    builder.addCase(createChapter.rejected, (state, action) => {
+      const { payload } = action;
+      state.isSubmitting = false;
+      state.error = payload;
+    });
+
   },
 });
 

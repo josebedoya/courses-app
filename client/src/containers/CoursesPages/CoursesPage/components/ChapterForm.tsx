@@ -1,8 +1,7 @@
 import React from 'react';
 import { Form, Col, Row, Input, TimePicker } from 'antd';
-import moment from 'moment';
-
-const format = 'HH:mm';
+// import moment from 'moment';
+// const format = 'HH:mm';
 
 interface Props {
   onFinish: (data: object) => void;
@@ -12,7 +11,7 @@ interface Props {
 
 const ChapterForm = ({ onFinish, isFormEdit, formData }: Props) => {
   return (
-    <Form layout='vertical' id='myForm' hideRequiredMark onFinish={onFinish}>
+    <Form layout='vertical' id='chapterForm' hideRequiredMark onFinish={onFinish}>
       <Row gutter={16}>
         <Col span={24}>
           <Form.Item
@@ -33,12 +32,27 @@ const ChapterForm = ({ onFinish, isFormEdit, formData }: Props) => {
       </Row>
       <Row gutter={16}>
         <Col span={24}>
+          {/* <Form.Item
+            name='duration'
+            label='Duration'
+            initialValue={isFormEdit ? formData.duration : moment('00:05', format)}
+          >
+            <TimePicker format={format} onChange={onChange} />
+          </Form.Item> */}
           <Form.Item
             name='duration'
             label='Duration'
-            initialValue={isFormEdit ? formData.duration : null}
+            help='HH:mm'
+            initialValue={isFormEdit ? formData.duration : '00:00'}
+            rules={[
+              {
+                required: true,
+                whitespace: true,
+                message: 'Please enter a duration',
+              },
+            ]}
           >
-            <TimePicker format={format} />
+            <Input placeholder='Please enter a duration' />
           </Form.Item>
         </Col>
       </Row>

@@ -75,7 +75,7 @@ export class CourseController {
       const result = await getRepository(Course).delete(id);
       return res.json(result);
     } catch (err) {
-      return res.status(500).send('Server errror');
+      return res.status(500).send('Server error');
     }
   };
 }

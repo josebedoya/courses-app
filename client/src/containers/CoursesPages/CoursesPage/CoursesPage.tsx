@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 
 import { Drawer, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -12,6 +13,7 @@ import {
   deleteCourse,
   getCourseById,
   getChaptersByCourseId,
+  createChapter,
 } from './coursesSlice';
 
 import { fetchCategories } from '../CategoriesPage/courseCategoriesSlice';
@@ -70,7 +72,23 @@ const CoursesPage = () => {
     }
   };
 
-  const onChapterFinish = () => {};
+  const onChapterFinish = async (values:any) => {
+    const { title, duration } = values;
+    if (isFormChapterEdit) {
+
+    } else {
+      const response: any = await dispatch(createChapter({ title, duration, courseId: getId }));
+      if (createChapter.fulfilled.match(response)) {
+        showNotification(
+          'success',
+          'Chapter created',
+          'Chapter was created successfully',
+        );
+        setShowDrawer(false);
+        setShowChapterDrawer(false);
+      }
+    }
+  };
 
   const handleDelete = async (id: number) => {
     const response: any = await dispatch(deleteCourse(id));
@@ -178,7 +196,7 @@ const CoursesPage = () => {
                       <Button
                         type='primary'
                         htmlType='submit'
-                        form='myForm'
+                        form='chapterForm'
                         key='submit'
                       >
                         Submit
